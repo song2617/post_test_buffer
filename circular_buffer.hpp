@@ -3,7 +3,6 @@
 
 #include <cstdint>
 #include <cstddef>
-#include <map>
 #include <string>
 #include <vector>
 #include <utility>
@@ -14,7 +13,7 @@ namespace circular_buffer{
   class CircularBuffer{
   public:
     CircularBuffer(std::size_t size):head_{0},tail_{0},count_{0},size_{size},buffer_(size){}
-    void clear(){count_=0;}
+    void clear(){count_=0;head_=0;tail_=0;}
     void overwrite(int32_t elem);
     int32_t read();
 
