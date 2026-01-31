@@ -6,24 +6,28 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <stdexcept>
 
 
 namespace circular_buffer {
-  void CircularBuffer::clear(){
-    head_=0;
-    tail_=0;
-    size_=0;
-    capacity_=0;
 
-  };
-
+  int32_t CircularBuffer::read(){
+    if(count_==0){throw std::domain_error("empty");}
+    int32_t a = buffer_[head_];
+    head_=(head_+1)%size_;
+    count_--;
+    return a;
+  }
   void CircularBuffer::overwrite(int32_t elem){
-    if(size_==capacity_){
-      head_=elem;
-      head_=(head_+1)%capacity_;
-    }
+    if(count_<size_){CircularBuffer::write(elem);}else{
+    buffer_[head_]=elem;
+    tail_=(head_+1)%size_;
+    head_=(head_+1)%size_;}
   };
-  void CircularBuffer::write(int32_t elem){};
-
-  CircularBuffer::~CircularBuffer(){delete[] buffer_;};
+  void CircularBuffer::write(int32_t elem){
+    if(count_==size_){throw std::domain_error("full");}
+    buffer_[tail_]=elem;
+    tail_=(tail_+1)%size_;
+    count_++;
+  };
 }
